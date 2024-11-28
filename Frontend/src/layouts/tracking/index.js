@@ -85,13 +85,13 @@ function Tracking() {
     const toggleServiceTrucks = () => {
         if (!showServiceTrucks) {
             const filtered = trucks.filter(
-                (truck) => truck.requested_services && truck.requested_services.length > 0
+                (truck) => Array.isArray(truck.requested_services) && truck.requested_services.length > 0
             );
             setServiceTrucks(filtered);
         } else {
-            setServiceTrucks([]);
+            setServiceTrucks([]); // Clear the service trucks
         }
-        setShowServiceTrucks(!showServiceTrucks); // Toggle visibility
+        setShowServiceTrucks((prev) => !prev); // Toggle visibility
     };
 
     return (
@@ -157,33 +157,58 @@ function Tracking() {
                                             zoom={9}
                                             style={{
                                                 height: "100%",
-                                                width: "100%"
+                                                width: "100%",
                                             }}
                                         >
                                             <TileLayer
                                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                                 attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
                                             />
-                                            {trucks.map((truck) => (
-                                                <Marker key={truck.id} position={[truck.latitude, truck.longitude]}>
-                                                    <Popup>
-                                                        <strong>{truck.name}</strong>
-                                                        <br />
-                                                        Latitude: {truck.latitude}
-                                                        <br />
-                                                        Longitude: {truck.longitude}
-                                                        <br />
-                                                        Speed: {truck.speed} mph
-                                                        <br />
-                                                        Status: {truck.status}
-                                                        <br />
-                                                        Services:{" "}
-                                                        {truck.requested_services.length > 0
-                                                            ? truck.requested_services.join(", ")
-                                                            : "None"}
-                                                    </Popup>
-                                                </Marker>
-                                            ))}
+                                            {showServiceTrucks
+                                                ? serviceTrucks.map((truck) => (
+                                                      <Marker
+                                                          key={truck.id}
+                                                          position={[truck.latitude, truck.longitude]}
+                                                      >
+                                                          <Popup>
+                                                              <strong>{truck.name}</strong>
+                                                              <br />
+                                                              Latitude: {truck.latitude}
+                                                              <br />
+                                                              Longitude: {truck.longitude}
+                                                              <br />
+                                                              Speed: {truck.speed} mph
+                                                              <br />
+                                                              Status: {truck.status}
+                                                              <br />
+                                                              Services:{" "}
+                                                              {truck.requested_services.join(", ")}
+                                                          </Popup>
+                                                      </Marker>
+                                                  ))
+                                                : trucks.map((truck) => (
+                                                      <Marker
+                                                          key={truck.id}
+                                                          position={[truck.latitude, truck.longitude]}
+                                                      >
+                                                          <Popup>
+                                                              <strong>{truck.name}</strong>
+                                                              <br />
+                                                              Latitude: {truck.latitude}
+                                                              <br />
+                                                              Longitude: {truck.longitude}
+                                                              <br />
+                                                              Speed: {truck.speed} mph
+                                                              <br />
+                                                              Status: {truck.status}
+                                                              <br />
+                                                              Services:{" "}
+                                                              {truck.requested_services.length > 0
+                                                                  ? truck.requested_services.join(", ")
+                                                                  : "None"}
+                                                          </Popup>
+                                                      </Marker>
+                                                  ))}
                                             <SetViewOnSearch filteredTrucks={filteredTrucks} />
                                         </MapContainer>
                                     </>
