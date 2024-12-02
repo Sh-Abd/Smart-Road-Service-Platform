@@ -43,6 +43,8 @@ import Schedule from "layouts/schedule";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import RequestService from "layouts/RequestService";
+
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -88,6 +90,14 @@ const routes = [
     icon: <Icon fontSize="small">notifications</Icon>,
     route: "/schedule",
     component: <Schedule />,
+  },
+  {
+    type: "collapse",
+    name: "Request Service",
+    key: "RequestService",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/RequestService",
+    component: <RequestService />,
   },
   {
     type: "collapse",
